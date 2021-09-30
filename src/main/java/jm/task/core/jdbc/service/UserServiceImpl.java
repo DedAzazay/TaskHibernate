@@ -7,27 +7,30 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserServiceImpl extends UserDaoJDBCImpl implements UserService {
-    public void createUsersTable() {
 
+    private UserDaoJDBCImpl dao = new UserDaoJDBCImpl();
+
+    public void createUsersTable() {
+        dao.createUsersTable();
     }
 
     public void dropUsersTable() {
-
+        dao.dropUsersTable();
     }
 
     public void saveUser(String name, String lastName, byte age) {
-
+        dao.saveUser(name, lastName, age);
     }
 
     public void removeUserById(long id) {
-
+        dao.removeUserById(id);
     }
 
     public List<User> getAllUsers() {
-        return null;
+        return dao.getAllUsers();
     }
 
     public void cleanUsersTable() {
-
+        dao.cleanUsersTable();
     }
 }
