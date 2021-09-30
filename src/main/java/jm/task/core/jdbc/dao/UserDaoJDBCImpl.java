@@ -36,15 +36,12 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try {
             bdWorker = new Util();
-            if (!bdWorker.getPreparedStatement(GET_ALL_USERS).execute()) {
-                preparedStatement = bdWorker.getPreparedStatement(CREATE_TABLE);
-                preparedStatement.executeUpdate();
-            }
-//            System.out.println("Таблица успешна создана");
+            preparedStatement = bdWorker.getPreparedStatement(CREATE_TABLE);
+            preparedStatement.executeUpdate();
+//          System.out.println("Таблица успешна создана");
             bdWorker.connectionCloser();
         } catch (SQLException e) {
-            System.out.println("SQL problem with create table");
-            e.printStackTrace();
+            System.out.println("Таблица уже существует");
         }
     }
 
