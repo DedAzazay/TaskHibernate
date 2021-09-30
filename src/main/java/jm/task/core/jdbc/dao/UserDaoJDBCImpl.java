@@ -33,7 +33,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    public void createUsersTable() throws SQLException {
+    public void createUsersTable() {
+
+        try {
             bdWorker = new Util();
             if (!bdWorker.getPreparedStatement(GET_ALL_USERS).execute()) {
                 preparedStatement = bdWorker.getPreparedStatement(CREATE_TABLE);
@@ -41,17 +43,28 @@ public class UserDaoJDBCImpl implements UserDao {
             }
 //            System.out.println("Таблица успешна создана");
             bdWorker.connectionCloser();
+        } catch (SQLException e) {
+            System.out.println("SQL problem with create table");
+            e.printStackTrace();
+        }
     }
 
-    public void dropUsersTable() throws SQLException{
+    public void dropUsersTable() {
+        try {
             bdWorker = new Util();
             preparedStatement = bdWorker.getPreparedStatement(DELETE_TABLE);
             preparedStatement.executeUpdate();
 //            System.out.println("Таблица успешно удалена");
             bdWorker.connectionCloser();
+        } catch (SQLException e) {
+            System.out.println("SQL problem with delete table");
+            e.printStackTrace();
+        }
+
     }
 
-    public void saveUser(String name, String lastName, byte age) throws SQLException{
+    public void saveUser(String name, String lastName, byte age) {
+        try {
             bdWorker = new Util();
             preparedStatement = bdWorker.getPreparedStatement(SAVE_NEW_USER);
             preparedStatement.setString(1, name);
@@ -60,19 +73,29 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             System.out.println("User с именем - " + name + " успешно добавлен в базу данных");
             bdWorker.connectionCloser();
+        } catch (SQLException e) {
+            System.out.println("SQL problem with save");
+            e.printStackTrace();
+        }
     }
 
-    public void removeUserById(long id) throws SQLException{
+    public void removeUserById(long id) {
+        try {
             bdWorker = new Util();
             preparedStatement = bdWorker.getPreparedStatement(DELETE_USER_BY_ID);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
 //            System.out.println("Пользователь успешно удалён");
             bdWorker.connectionCloser();
+        } catch (SQLException e) {
+            System.out.println("SQL problem with delete table");
+            e.printStackTrace();
+        }
     }
 
-    public List<User> getAllUsers() throws SQLException{
+    public List<User> getAllUsers() {
         List<User> result = new ArrayList<>();
+        try {
             bdWorker = new Util();
             preparedStatement = bdWorker.getPreparedStatement(GET_ALL_USERS);
             resultSet = preparedStatement.executeQuery();
@@ -86,14 +109,23 @@ public class UserDaoJDBCImpl implements UserDao {
                 result.add(user);
             }
             bdWorker.connectionCloser();
+        } catch (SQLException e) {
+            System.out.println("SQL problem with create");
+            e.printStackTrace();
+        }
         return result;
     }
 
-    public void cleanUsersTable() throws SQLException{
+    public void cleanUsersTable() {
+        try {
             bdWorker = new Util();
             preparedStatement = bdWorker.getPreparedStatement(CLEAR_TABLE);
             preparedStatement.executeUpdate();
 //            System.out.println("Таблица успешно очищена");
             bdWorker.connectionCloser();
+        } catch (SQLException e) {
+            System.out.println("SQL problem with cleaning table");
+            e.printStackTrace();
+        }
     }
 }
