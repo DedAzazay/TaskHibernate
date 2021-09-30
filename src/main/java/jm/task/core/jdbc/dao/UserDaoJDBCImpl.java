@@ -25,7 +25,6 @@ public class UserDaoJDBCImpl implements UserDao {
     private final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
 
     private ResultSet resultSet;
-
     private PreparedStatement preparedStatement;
     private Util bdWorker;
 
