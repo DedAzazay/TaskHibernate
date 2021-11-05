@@ -3,12 +3,13 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
 
-
+    private SessionFactory sessionFactory = Util.getSessionFactory();
 
     public UserDaoHibernateImpl() {
 
@@ -17,7 +18,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
             String sql = "CREATE TABLE IF NOT EXISTS `mydbtest`.`users` " +
@@ -33,13 +34,15 @@ public class UserDaoHibernateImpl implements UserDao {
                 session.getTransaction().rollback();
             }
         } finally {
-            Util.shutdown();
+            session.close();
+
+
         }
     }
 
     @Override
     public void dropUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
             String sql = "DROP TABLE IF EXISTS users";
@@ -50,13 +53,13 @@ public class UserDaoHibernateImpl implements UserDao {
                 session.getTransaction().rollback();
             }
         } finally {
-            Util.shutdown();
+            session.close();
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = Util.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
             User user = new User(name, lastName, age);
@@ -67,13 +70,14 @@ public class UserDaoHibernateImpl implements UserDao {
                 session.getTransaction().rollback();
             }
         } finally {
-            Util.shutdown();
+            session.close();
+
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        Session session = Util.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
             String hql = "DELETE FROM User WHERE id = :Id";
@@ -84,14 +88,15 @@ public class UserDaoHibernateImpl implements UserDao {
                 session.getTransaction().rollback();
             }
         } finally {
-            Util.shutdown();
+            session.close();
+
         }
     }
 
     @Override
     public List<User> getAllUsers() {
         List<User> list = null;
-        Session session = Util.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
             String hql = "FROM User";
@@ -103,14 +108,15 @@ public class UserDaoHibernateImpl implements UserDao {
                 session.getTransaction().rollback();
             }
         } finally {
-            Util.shutdown();
+            session.close();
+
         }
         return list;
     }
 
     @Override
     public void cleanUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
             String hql = "DELETE FROM User";
@@ -121,7 +127,8 @@ public class UserDaoHibernateImpl implements UserDao {
                 session.getTransaction().rollback();
             }
         } finally {
-            Util.shutdown();
+            session.close();
+
         }
     }
 }
